@@ -2,18 +2,18 @@ import React from 'react';
 import { Scene, Router, Actions } from 'react-native-router-flux';
 import HistoryPage from './components/HistoryPage';
 import EquationPage from './components/EquationPage';
+import GreetingPage from './components/GreetingPage'
 
 const RouterComponent = () => {
-	return (
+    return (
 		<Router>
 			<Scene key="root" style={{ paddingTop: 60 }}>
+				<Scene key="greeting" component={GreetingPage} initial />
 				<Scene
-					rightTitle="History"
-					onRight={() => Actions.history()} 
+					//rightTitle="History"
 					key="main" 
 					component={EquationPage} 
 					title="System Equation Solver" 
-					initial 
 				/>
 				<Scene key="history" component={HistoryPage} title="Solving History" />
 			</Scene>

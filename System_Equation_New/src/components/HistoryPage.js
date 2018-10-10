@@ -8,7 +8,7 @@ import ListItem from './ListItem';
 class HistoryPage extends Component {
 
 	componentWillMount() {
-		this.props.historyFetch();
+		this.props.historyFetch(this.props.name);
 
 		this.createDataSource(this.props);
 	}

@@ -1,10 +1,16 @@
+// Note for Oct 3rd, cancel the auto go back from history page to 
+// equation page, have a button in this page to go history page so i can pass the name
+// then pass the name to fetchHistory(), also have a button in history page to bring back
+// to equation page
 import firebase from 'firebase';
 import React, { Component } from 'react';
 import { View, Text } from 'react-native';
+import { Button } from 'native-base'; //Include Nativebase required components
 import { connect } from 'react-redux';
-import { Card, Button } from './common';
+import { Card } from './common';
 import ConstEnteringSec from './ConstEnteringSec';
 import { x1ConstChanged, y1ConstChanged, const1Changed, storeInput } from '../actions';
+import { Actions } from '../../node_modules/react-native-router-flux';
 
 class EquationPage extends Component {
 	state = { 
@@ -13,7 +19,7 @@ class EquationPage extends Component {
 		x2Const: '',
 		y2Const: '',
 		const2: '',
-		name: 'Wenhao'
+		//name: 'Wenhao'
 	};
 
 	onButtonPressDoCalc = () => {
@@ -40,7 +46,7 @@ class EquationPage extends Component {
 			yAns: (up2 / down2).toFixed(3)
 		});
 
-		firebase.database().ref(`/users/${this.state.name}`)
+		firebase.database().ref(`/users/${this.props.name}`)
 			.push({ x1Const, y1Const, const1, x2Const, y2Const, const2, xAns: (up1 / down1).toFixed(3), yAns: (up2 / down2).toFixed(3) });
 	}
 
@@ -118,11 +124,36 @@ class EquationPage extends Component {
 
 				{this.renderAnswer()}
 
-				<View style={{ height: 55, padding: 5 }}>
-					<Button 
-						text="Solve"
-						whenPressed={this.onButtonPressDoCalc} 
-					/>					
+				<View style={{ height: 55, padding: 5 }}>		
+					<Button rounded success
+						onPress={this.onButtonPressDoCalc} 
+						style={{
+							flex: 1,
+							alignSelf: 'stretch',
+							justifyContent:'center', //horizontally
+							marginLeft: 5,
+							marginRight: 5
+						}}
+					>
+            			<Text
+							style={{
+								alignSelf: 'center',
+								color: '#ffffff',
+								fontSize: 18,
+								fontWeight: '600',	//boldness
+							}}
+						>Solve!</Text>
+          			</Button>		
+				</View>
+				<View style={{flexDirection: 'row', justifyContent: 'flex-end'}}>
+					//passing the name further to HistoryPage
+					<Button transparent info
+						onPress={() => {Actions.history({name: this.props.name})}}  
+					>
+						<Text style={{color: '#007aff', fontSize: 16}}>
+							History
+						</Text>
+					</Button>
 				</View>
 			</Card>
 		);
