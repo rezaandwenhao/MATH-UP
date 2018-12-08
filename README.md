@@ -47,3 +47,7 @@ User can have its individual solving history.
 </p>
 
 ### I would like to make this project open source to learn from the community!
+#### Potential improvements:
+1. A better UI
+2. A clear button to reset the equation page
+3. Refactor the code
