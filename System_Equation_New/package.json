@@ -30,8 +30,10 @@
     "native-base": "^2.8.1",
     "react": "16.3.1",
     "react-native": "~0.55.2",
+    "react-native-custom-keyboard": "^1.0.4",
     "react-native-elements": "^0.19.1",
     "react-native-router-flux": "^3.43.0",
+    "react-native-swiper": "^1.5.14",
     "react-redux": "^5.0.7",
     "redux": "^4.0.0",
     "redux-thunk": "^2.3.0"

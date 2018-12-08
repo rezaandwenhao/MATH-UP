@@ -4,10 +4,9 @@
 // to equation page
 import firebase from 'firebase';
 import React, { Component } from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, Alert, ImageBackground } from 'react-native';
 import { Button } from 'native-base'; //Include Nativebase required components
 import { connect } from 'react-redux';
-import { Card } from './common';
 import ConstEnteringSec from './ConstEnteringSec';
 import { x1ConstChanged, y1ConstChanged, const1Changed, storeInput } from '../actions';
 import { Actions } from '../../node_modules/react-native-router-flux';
@@ -18,13 +17,44 @@ class EquationPage extends Component {
 		yAns: '',
 		x2Const: '',
 		y2Const: '',
-		const2: '',
-		//name: 'Wenhao'
+		const2: ''
 	};
 
-	onButtonPressDoCalc = () => {
+	onButtonPress = () => {
 		const { x1Const, y1Const, const1 } = this.props;
 		const { x2Const, y2Const, const2 } = this.state;
+
+		// parse the fraction to number available for calculation if there is any
+		this.props.x1ConstChanged(fractionToNum(x1Const));
+		this.props.y1ConstChanged(fractionToNum(y1Const));
+		this.props.const1Changed(fractionToNum(const1));
+		this.setState({
+			x2Const: fractionToNum(x2Const),
+			y2Const: fractionToNum(y2Const),
+			const2: fractionToNum(const2)
+		}, this.calculate);
+	}
+
+	calculate = () => {
+		const { x1Const, y1Const, const1 } = this.props;
+		const { x2Const, y2Const, const2 } = this.state;
+
+		if (isNaN(x1Const) || x1Const === Infinity || x1Const == "" ||
+		isNaN(y1Const) || y1Const === Infinity || y1Const == "" ||
+		isNaN(const1) || const1 === Infinity || const1 == "" ||
+		isNaN(x2Const) || x2Const === Infinity || x2Const == "" ||
+		isNaN(y2Const) || y2Const === Infinity || y2Const == "" ||
+		isNaN(const2) || const2 === Infinity || const2 == "" ) {
+			Alert.alert(
+				'Number Input Error',
+				'Please enter integer, decimal, or fraction.',
+				[
+				  {text: 'OK'},
+				],
+				{ cancelable: false }
+			  )
+			return;
+		}
 
 		const a1 = (Number(y1Const) * Number(const2));
 		const a2 = (Number(y2Const) * Number(const1));
@@ -48,6 +78,12 @@ class EquationPage extends Component {
 
 		firebase.database().ref(`/users/${this.props.name}`)
 			.push({ x1Const, y1Const, const1, x2Const, y2Const, const2, xAns: (up1 / down1).toFixed(3), yAns: (up2 / down2).toFixed(3) });
+	
+
+
+	//	console.log(x1Const);
+		// TODO: check if all the constants are NaN, if no, print warning and return immediately
+
 	}
 
 	onX1ConstChange = (text) => {
@@ -64,19 +100,19 @@ class EquationPage extends Component {
 
 	onX2ConstChange = (text) => {
 		this.setState({
-			x2Const: text.replace(/[^0-9^-^.^/]/g, '')
+			x2Const: text.replace(/[^-^0-9^.^/]/g, '')
 		});
 	}
 
 	onY2ConstChange = (text) => {
 		this.setState({
-			y2Const: text.replace(/[^0-9^-^.^/]/g, '')
+			y2Const: text.replace(/[^-^0-9^.^/]/g, '')
 		});
 	}
 
 	onConst2Change = (text) => {
 		this.setState({
-			const2: text.replace(/[^0-9^-^.^/]/g, '')
+			const2: text.replace(/[^-^0-9^.^/]/g, '')
 		});
 	}
 
@@ -90,24 +126,24 @@ class EquationPage extends Component {
 			yAns === Infinity ||
 			yAns === -Infinity) {
 			return (
-				<View style={{ borderColor: 'lightgreen', borderWidth: 5, padding: 20 }}>
-					<Text>The system equation you entered has no solution or infinite solution.</Text>
+				<View style={styles.answerSectionStyle}>
+					<Text style={{fontSize: 25, color: 'white'}}>The system equation you entered has no solution or infinite solution.</Text>
 				</View>
 			);
 		} 
 		return (
-			<View style={{ borderColor: 'lightgreen', borderWidth: 5, padding: 20 }}>
-				<Text>Answer:</Text>
-				<Text>x = {this.state.xAns}</Text>
-				<Text>y = {this.state.yAns}</Text>
+			<View style={styles.answerSectionStyle}>
+				<Text style={{color: 'lightgreen', fontSize: 25}}>Answer:</Text>
+				<Text style={{fontSize: 40, color: 'white'}}>x = {this.state.xAns}</Text>
+				<Text style={{fontSize: 40, color: 'white'}}>y = {this.state.yAns}</Text>
 			</View>
 		);	
 	}
 
 	render() {
 		return (
-			<Card>
-				<ConstEnteringSec 
+			<ImageBackground style={styles.mainConatinerStyle} source={require('../images/background.png')}> 
+				<ConstEnteringSec style={styles.constEnteringSecStyle}
 					x1Const={this.props.x1Const}
 					onX1ConstChange={this.onX1ConstChange}
 					y1Const={this.props.y1Const}
@@ -124,9 +160,9 @@ class EquationPage extends Component {
 
 				{this.renderAnswer()}
 
-				<View style={{ height: 55, padding: 5 }}>		
+				<View style={styles.solveBtnStyle }>		
 					<Button rounded success
-						onPress={this.onButtonPressDoCalc} 
+						onPress={this.onButtonPress} 
 						style={{
 							flex: 1,
 							alignSelf: 'stretch',
@@ -145,19 +181,28 @@ class EquationPage extends Component {
 						>Solve!</Text>
           			</Button>		
 				</View>
-				<View style={{flexDirection: 'row', justifyContent: 'flex-end'}}>
+				<View style={styles.historyBtnStyle}>
 					//passing the name further to HistoryPage
 					<Button transparent info
 						onPress={() => {Actions.history({name: this.props.name})}}  
 					>
-						<Text style={{color: '#007aff', fontSize: 16}}>
+						<Text style={{color: 'orange', fontSize: 16}}>
 							History
 						</Text>
 					</Button>
 				</View>
-			</Card>
+			</ImageBackground>
 		);
 	}
+}
+
+function fractionToNum(text) {
+	for (var i = 0; i < text.length; i++) {
+		if (text.charAt(i) == '/') {
+			return (Number(text.substring(0, text.indexOf('/'))) / Number(text.substring(text.indexOf('/')+1))).toFixed(3); 
+		}
+	}
+	return text;
 }
 
 const mapStateToProps = state => {
@@ -166,6 +211,38 @@ const mapStateToProps = state => {
 		y1Const: state.equationPage.y1Const,
 		const1: state.equationPage.const1
 	};
+};
+
+const styles = {
+	mainConatinerStyle: {
+		flexDirection: 'column',
+		flex: 1,
+	},
+	constEnteringSecStyle: {
+		position: 'absolute',
+		top: '30%',
+	},
+	answerSectionStyle: {
+		borderColor: 'lightgreen', 
+		width: '100%',
+		borderWidth: 5, 
+		padding: 20,
+		position: 'absolute',
+		bottom: '37%'
+	},
+	solveBtnStyle: {
+		height: 45, 
+		width: '98%',
+		position: 'absolute',
+		bottom: 90	
+	},
+	historyBtnStyle: {
+		flexDirection: 'row', 
+		alignSelf: 'flex-end',
+		position: 'absolute',
+		bottom: 50,
+		paddingRight: 15
+	},
 };
 
 export default connect(mapStateToProps, { 

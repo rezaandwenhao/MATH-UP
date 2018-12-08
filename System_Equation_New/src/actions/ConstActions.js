@@ -7,21 +7,21 @@ import {
 export const x1ConstChanged = (text) => {
 	return {
 		type: X1CONST_CHANGED,
-		payload: text.replace(/[^0-9^-^.^/]/g, ''),
+		payload: text.replace(/[^-^0-9^.^/]/g, ''),
 	};
 };
 
 export const y1ConstChanged = (text) => {
 	return {
 		type: Y1CONST_CHANGED,
-		payload: text.replace(/[^0-9^-^.^/]/g, ''),
+		payload: text.replace(/[^-^0-9^.^/]/g, ''),
 	};
 };
 
 export const const1Changed = (text) => {
 	return {
 		type: CONST1_CHANGED,
-		payload: text.replace(/[^0-9^-^.^/]/g, ''),
+		payload: text.replace(/[^-^0-9^.^/]/g, ''),
 	};
 };
 

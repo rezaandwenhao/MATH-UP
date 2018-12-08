@@ -24,22 +24,38 @@ class GreetingPage extends Component {
 					backgroundColor: "#7FFFD4"
 				}}
 			>
-				<Text style={{ fontSize: 15, marginBottom: 10, marginLeft: 20}}>
+				<Text style={{ 
+					fontSize: 25, 
+					marginBottom: 10, 
+					marginLeft: 20, 
+					fontFamily: "ChalkboardSE-Bold",
+					color: '#004d99'
+				}}>
 					Hi, how can I call you?
 				</Text>
 				<FormInput 
+					inputStyle={{ 		
+						color: '#000',
+						fontSize: 25, 
+					}} 
 					placeholder="Name(nickname)"
 					value={this.state.name}
 					onChangeText={this.onNameChange}
 				/>
 				<Button
+					buttonStyle={{ marginTop: 20 }}
   					rightIcon={{name: "pets"}}
 					title="GO SOLVE!"
 					onPress={() => {Actions.main({name: this.state.name})}}  
+					disabled={nameEntered(this.state.name)}
 				/>
 			</View>
 		);
 	}
+}
+
+function nameEntered(name) {
+	return (name.length === 0 || !name.trim());
 }
 
 export default GreetingPage;
