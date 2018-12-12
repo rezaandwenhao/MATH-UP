@@ -12,7 +12,7 @@ class ListItem extends Component {
 					<View style={{ flex: 2 }}>
 						<Image 
 							style={styles.bracketStyle}
-							source={{ uri: 'https://static.thenounproject.com/png/870097-200.png' }} 
+							source={require('../images/parenthesisForHisPage.png')}
 						/>	
 					</View>
 					<View style={[styles.containerStyle, { flex: 10 }]}>
@@ -26,7 +26,7 @@ class ListItem extends Component {
 					<View style={{ flex: 3 }}>
 						<Image 
 							style={styles.bracketStyle}
-							source={{ uri: 'http://assets.stickpng.com/thumbs/580b57fcd9996e24bc43c44d.png' }} 
+							source={require('../images/arrow.png')}
 						/>	
 					</View>	
 					<View style={[styles.containerStyle, { flex: 6 }]}>
