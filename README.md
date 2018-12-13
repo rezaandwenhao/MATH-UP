@@ -6,12 +6,12 @@
 3. npm install
 4. npm start
 
-Dependencies might be needed to install:
-<br>npm install –save redux react-redux
-<br>npm install –save redux-thunk 
-<br>npm install –save react-native-router-flux@3.35.0 
-<br>npm install –save lodash 
-<br>npm install –save firebase
+Dependencies include:
+<br> redux react-redux
+<br> redux-thunk 
+<br> react-native-router-flux@3.35.0 
+<br> lodash 
+<br> firebase
 
 This is a two-unknown-variable system equation solver app using React Native. I used firebase to store the equation solving history. For the using of the firebase, I wanted to practice some basic database usage and also, I would like to fetch personal individual history for different users.
 
