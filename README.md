@@ -3,8 +3,9 @@
 # Installation
 1. git clone https://github.com/rezaandwenhao/system-equation-solver
 2. cd system-equation-solver
-3. npm install
-4. npm start
+3. cd System_Equation_New
+4. npm install
+5. npm start
 
 Dependencies include:
 <br> redux react-redux
